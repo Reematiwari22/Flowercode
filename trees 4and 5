@@ -1,0 +1,174 @@
+1.
+class BinaryTree {
+    boolean OneChild(int prev[], int size) {
+       int nextDiff, lastDiff;
+       for (int i = 0; i < n - 1; i++) {
+             nextDiff = prev[i] - prev[i + 1];
+             lastDiff = prev[i] - prev[n - 1];
+             if (nextDiff * lastDiff < 0) {
+                 return false;
+             };
+         }
+         return true;
+     }
+  
+     public static void main(String[] args) {
+         BinaryTree tree = new BinaryTree();
+         int prev[] = new int[]{8, 3, 5, 7, 6};
+         int size = pre.length;
+         if (tree.OneChild(prev, n) == true) {
+             System.out.println("Yes");
+         } else {
+             System.out.println("No");
+         }
+     }
+ }
+
+
+
+2.public class Solution{
+    public static int findCeil(TreeNode<Integer> root, int key){
+        int ceil=-1;
+        while(root!= null){
+            if(root.data==key){
+                ceil = root.data;
+                return ceil;
+            }
+            if(key> root.data){
+                root= root.right;
+            }
+            else{
+                ceil= root.data;
+                root= root.left;
+            }
+        }
+        return ceil;
+    }
+}
+
+
+
+
+3.class Solution {
+    int[] Nums;
+    public TreeNode sortedArrayToBST(int[] nums) {
+        Nums=nums;
+        return buildBST(0,nums.length-1);
+    }
+    private TreeNode buildBST(int s,int e){
+        if(s>e)return null;
+        int mid=(s+e)/2;
+        TreeNode cur=new TreeNode(Nums[mid]);
+        cur.left=buildBST(s, mid-1);
+        cur.right=buildBST(mid+1,e);
+        return cur;
+    }
+}
+
+
+
+
+4.class NodeValue{
+    public int maxNode , minNode , maxSize;
+    NodeValue(int minNode ,int maxNode, int maxSize){
+    this.maxNode =maxNode;
+    this.minNode =minNode;
+    this.maxSize =maxSize;
+    }
+};
+class Solution{
+    private NodeValue largestBSTSubtreeHelper(TreeNode root){
+        if(root==null){
+            return new NodeValue(Integer.MAX_VALUE, Integer.MIN_VALUE,0);
+        }
+        NodeValue left= largestBSTSubtreeHelper(root.left);
+        NodeValue right= largestBSTSubtreeHelper(root.right);
+        if(left.maxNode< root.val && root.val < right.minNode){
+            return new NodeValue(Math.min(root.val, left.minNode),Math.max(root.val,right.maxNode),
+            left.maxSize+ right.maxSize +1);
+        }
+        return new NodeValue(Integer.MIN_VALUE,Integer.MAX_VALUE,
+                           Math.max(left.maxSize, right.maxSize));
+    }
+    public int largestBSTSubtree(TreeNode root){
+        return largestBSTSubtreeHelper(root).maxSize;
+    }
+}
+
+
+
+
+5.class Solution {
+    int maxSum=0;
+    public int maxSumBST(TreeNode root) {
+       if(root==null){
+        return 0;
+       } 
+       traverse(root);
+       return maxSum;
+    }
+    class Result{
+        int lower,upper,sum;
+        public Result(int lower,int upper,int sum){
+            this.lower=lower;
+            this.upper=upper;
+            this.sum=sum;
+        }
+    }
+    public Result traverse(TreeNode node){
+        if(node== null){
+            return new Result(Integer.MAX_VALUE, Integer.MIN_VALUE, 0);
+        }
+        Result left= traverse(node.left);
+        Result right= traverse(node.right);
+        if(left==null|| right==null){
+            return null;
+        }
+        if(node.val<=left.upper|| node.val>=right.lower){
+            return  null;
+        }
+        maxSum=Math.max(maxSum, node.val+ left.sum + right.sum);
+        int lower=Math.min(node.val,left.lower);
+        int upper=Math.max(node.val,right.upper);
+        return new Result(lower,upper, left.sum + right.sum + node.val);
+      }
+}
+
+
+
+6.class Solution {
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        if(root==null)
+        return 0;
+        int sum=0;
+        if(root.val>low)
+        sum+= rangeSumBST(root.left,low,high);
+        if(root.val>=low&& root.val<=high)
+          sum+=root.val;
+        if(root.val<high)
+           sum+= rangeSumBST(root.right, low,high);
+           return sum;
+
+        
+    }
+}
+
+
+
+
+7.class Solution {
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        if(root==null)
+        return 0;
+        int sum=0;
+        if(root.val>low)
+        sum+= rangeSumBST(root.left,low,high);
+        if(root.val>=low&& root.val<=high)
+          sum+=root.val;
+        if(root.val<high)
+           sum+= rangeSumBST(root.right, low,high);
+           return sum;
+
+        
+    }
+}
