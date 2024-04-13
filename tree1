@@ -1,1 +1,220 @@
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        Queue<TreeNode> queue= new LinkedList<TreeNode>();
+        List<List<Integer>> wrapList =new LinkedList<List<Integer>>();
+        if(root== null)return wrapList;
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int levelNum= queue.size();
+            List<Integer>subList=new LinkedList<Integer>();
+            for(int i=0;i<levelNum; i++){
+                if(queue.peek().left!=null)queue.offer(queue.peek().left);
+                if(queue.peek().right!=null)queue.offer(queue.peek().right);
+                subList.add(queue.poll().val);
+            }
+            wrapList.add(subList);
+        }
+        return wrapList;
+    }
+}
 
+
+2.
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+      Queue<TreeNode> queue=new ArrayDeque<>();
+      queue.add(root);
+
+      int left_most=0;
+
+      while(queue.size()>0) 
+      {
+        left_most=queue.peek().val;
+        int size=queue.size();
+        for(int i=1; i<=size;i++)
+        {
+            TreeNode tmp=queue.poll();
+            if(tmp.left!=null)queue.add(tmp.left);
+            if(tmp.right!=null)queue.add(tmp.right);
+        }
+      } 
+      return left_most;
+    }
+}
+
+
+3.class Solution {
+    public void dfs(TreeNode root1,List<String> result,String str){
+        str+="->"+root1.val;
+        if(root1.left==null && root1.right==null){
+            result.add(str);
+            return;
+        }
+        if(root1.left!=null){
+            dfs(root1.left,result,str);
+        }
+        if(root1.right!=null){
+            dfs(root1.right,result,str);
+        }
+    }
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> result=new ArrayList<>();
+        if(root==null) return result;
+        String str=Integer.toString(root.val);
+        if(root.left==null && root.right==null){
+            result.add(str);
+        }
+        if(root.left!=null){
+            dfs(root.left,result,str);
+        }
+        if(root.right!=null){
+            dfs(root.right,result,str);
+        }
+        return result;
+    }
+}
+
+
+
+4.
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null || root==p|| root==q){
+            return root;
+        }
+        TreeNode left= lowestCommonAncestor(root.left,p ,q);
+        TreeNode right= lowestCommonAncestor(root.right,p ,q);
+
+        if(left==null){
+         return right;
+        }
+        else if(right==null){
+            return left;
+        }
+        else{
+            return root;
+        }
+     }
+}
+
+
+
+5.class GfG {
+    Node lowestCommonAncestor(Node root, int p, int q) {
+        if(root==null || root.data==p || root.data==q){
+            return root;
+        }
+        Node left=lowestCommonAncestor(root.left,p,q);
+        Node right=lowestCommonAncestor(root.right,p,q);
+        if(left==null){
+            return right;
+        }
+        else if(right==null){
+            return left;
+        }
+        else if(left!=null && right!=null){
+            return root;
+        }
+        else{
+            return null;
+        } 
+    }
+    int height(Node ancestor,int n,int d){
+        if(ancestor==null) return Integer.MAX_VALUE;
+        if(ancestor.data==n) return d;
+        return Math.min(height(ancestor.left,n,d+1),height(ancestor.right,n,d+1));
+    }
+    int findDist(Node root, int a, int b){
+        Node ancestor=lowestCommonAncestor(root,a,b);
+        int h1=height(ancestor,a,0);
+        int h2=height(ancestor,b,0);
+        return h1+h2;
+    }
+}
+
+
+
+
+6.
+class Solution {
+    List<List<Integer>> res= new LinkedList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        if(root==null) return res;
+        dfs(root, targetSum ,new LinkedList<>());
+        return res;
+    }
+    private void dfs(TreeNode root, int targetSum, List<Integer> path){
+        targetSum-= root.val;
+        path.add(root.val);
+        if(root.left==null && root.right== null && targetSum==0){
+            res.add(new LinkedList<>(path));
+        }else{
+            if(root.left!=null){
+                dfs(root.left, targetSum ,path);
+            }
+            if(root.right!=null){
+                dfs(root.right, targetSum, path);
+            }
+        }
+        path.remove(path.size()-1);
+        }
+    }
+
+
+
+7.class Solution {
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<Long, Integer> map = new HashMap<>();
+        map.put(0L, 1);
+        return get(root, targetSum, map, 0L);
+    }
+    private int get(TreeNode root, int targetSum, Map<Long, Integer> map, long prefixSum) {
+        if (root == null) {
+            return 0;
+        }
+
+        prefixSum += root.val;
+        int count = map.getOrDefault(prefixSum - targetSum, 0);
+
+        map.put(prefixSum, map.getOrDefault(prefixSum, 0) + 1);
+        count += get(root.left, targetSum, map, prefixSum);
+        count += get(root.right, targetSum, map, prefixSum);
+        map.put(prefixSum, map.get(prefixSum) - 1);
+
+        return count;
+    }
+}
+
+
+8.
+class Solution {
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if(root==null)return false;
+    
+       if(root.left==null&& root.right==null && targetSum-root.val==0)return true;
+       return hasPathSum(root.left, targetSum-root.val)||
+       hasPathSum(root.right , targetSum-root.val);
+    }
+}
+
+
+
+
+9.public class Solution {
+    public boolean help(TreeNode root,ArrayList<Integer> result, int B){
+        if(root==null) return false;
+        result.add(root.val);
+        if(root.val==B) return true;
+        if(help(root.left,result,B) || help(root.right,result,B)){
+           return true;
+        }
+        result.remove(result.size()-1);
+        return false;
+    }
+    public ArrayList<Integer> solve(TreeNode A, int B) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        if(A==null) return result;
+        help(A,result,B);
+        return result;
+    }
+}
