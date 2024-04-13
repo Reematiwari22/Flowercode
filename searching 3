@@ -1,1 +1,157 @@
+1.
+import java.util.*;
+class Maximum_size_for_subarray{
+    public static int box(int a[],int s,int mid){
+        int total = 0;
+        int n = a.length;
+        int sum = 0;
+        for(int i=0;i<mid;i++) {
+            sum = sum + a[i];
+        }
+        if(sum <= s) total++;
+        int sum2 = 0;
+        for(int i=mid;i<n;i++){
+            sum = (sum - a[sum2]) + a[i];
+            if(sum<=s)total++;
+            sum2++;
+        }
+        return total;
+    }
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int a[] = new int[n];
+        for(int i=0;i<n;i++){
+          a[i] = in.nextInt();
+        }
+        int s = in.nextInt();
+        int low = 1;
+        int high = n;
+        int max = 0;
+        int ans = -1;
+        while(low <= high) {
+            int mid = low + (high-low)/2;
+            int res = box(a,s,mid);
+            if(res != 0){
+                if(res > max){
+                    max = res;
+                    ans = mid;
+                    low = mid + 1;
+                }
+            }
+            else {
+                high = mid - 1;
+            }
+        }
+        System.out.println(ans);
+    }
+}
 
+
+
+2.
+import java.util.Arrays;
+
+public class Minimum_Limit_of_Balls_in_a_Bag_1760 {
+	 public int minimumSize(int[] nums, int maxOperations) {
+		    int l = 1;
+		    int r = Arrays.stream(nums).max().getAsInt();
+
+		    while (l < r) {
+		      final int m = (l + r) / 2;
+		      if (numOperations(nums, m) <= maxOperations)
+		        r = m;
+		      else
+		        l = m + 1;
+		    }
+
+		    return l;
+		  }
+	 private int numOperations(int[] nums, int m) {
+     int operations = 0;
+     for (final int num : nums)
+       operations += (num - 1) / m;
+		   return operations;
+	 }
+
+}
+
+
+
+
+3.
+public class Minimum_numbe_of_days_to_place_m_bouques {
+    public int possible(int[] bloomDay, int mid,int m, int k){
+        int count=0,no=0;
+        for(int i=0;i<bloomDay.length;i++){
+            if(bloomDay[i]<=mid){
+                count++;
+            }else{
+                no+=(count/k);
+                count=0;
+            }
+        }
+        no+=(count/k);
+        return no;
+    }
+    public int minDays(int[] bloomDay, int m, int k) {
+        long val= m*k;
+        if(val>bloomDay.length) return -1;
+        int low=Integer.MAX_VALUE;
+
+        int high=Integer.MIN_VALUE;
+        for(int i=0;i<bloomDay.length;i++){
+            low=Math.min(low,bloomDay[i]);
+            high=Math.max(high,bloomDay[i]);
+        }
+        int ans=-1;
+        while(low<=high){
+            int mid=(low+high)/2;
+            if(possible(bloomDay,mid,m,k)>=m){
+                ans=mid;
+                high=mid-1;
+            }else{
+                low=mid+1;
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+4.public class Painters_partition {
+    public static int countPainters(ArrayList<Integer> boards,int mid){
+        int painter=1;
+        long total=0;
+        for(int i=0;i<boards.size();i++){
+            if(total+boards.get(i)<=mid){
+                total+=boards.get(i);
+            }else{
+                painter++;
+                total=boards.get(i);
+            }
+        }
+        return painter;
+    }
+    public static int findLargestMinDistance(ArrayList<Integer> boards, int k)
+    {
+        int low=boards.get(0);
+        int high=0;
+        for(int i=0;i<boards.size();i++){
+            low=Math.max(low,boards.get(i));
+            high+=boards.get(i);
+
+        }
+        while(low<=high){
+            int mid=(low+high)/2;
+            int painter=countPainters(boards,mid);
+            if(painter>k){
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+        return low;
+    }
+}
